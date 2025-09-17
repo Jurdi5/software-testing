@@ -9,13 +9,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
-          java-version: '17'
+          java-version: 17
+          distribution: temurin
+
       - name: Compile HolaMundo
         run: javac HolaMundo.java
+
       - name: Run HolaMundo
         run: java HolaMundo

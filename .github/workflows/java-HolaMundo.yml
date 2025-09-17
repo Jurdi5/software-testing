@@ -1,33 +1,21 @@
-name: Java HolaMundo CI
+name: Java HelloWorld CI
 
-# Cuándo se ejecuta el workflow
 on:
   push:
-    branches: [ main ]
-  pull_request:
     branches: [ main ]
 
 jobs:
   build:
-    name: Compile and Run HolaMundo
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Clona tu repo
-      - name: Checkout repository
+      - name: Checkout repo
         uses: actions/checkout@v4
-
-      # 2️⃣ Instala Java (OpenJDK 17)
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
           java-version: '17'
-          distribution: 'temurin'
-
-      # 3️⃣ Compila el archivo Java
-      - name: Compile Java
+      - name: Compile HolaMundo
         run: javac HolaMundo.java
-
-      # 4️⃣ Ejecuta el programa
-      - name: Run HelloWorld
-        run: java HelloWorld
+      - name: Run HolaMundo
+        run: java HolaMundo

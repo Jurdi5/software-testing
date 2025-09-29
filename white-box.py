@@ -13,6 +13,7 @@ def is_even(num):
     return num % 2 == 0
 
 
+
 def divide(a, b):
     """
     Simple division function.
@@ -53,49 +54,67 @@ def check_number_status(number):
     """
     Checks if a given number is positive, negative, or zero.
     """
-    if number > 0:
-        return "Positive"
 
-    if number < 0:
-        return "Negative"
+    # Camino: excepción por entrada no numérica
+    assert check_number_status("abc") == "Not Number"
 
-    return "Zero"
+    # Camino: número positivo
+    assert check_number_status("10") == "Positive"
 
+    # Camino: número negativo
+    assert check_number_status("-5") == "Negative"
+
+    # Camino: número cero
+    assert check_number_status("0") == "Zero"
+
+    # Camino: número flotante positivo
+    assert check_number_status("3.14") == "Positive"
+
+    # Camino: número flotante negativo
+    assert check_number_status("-2.71") == "Negative"
 
 # 2
 def validate_password(password):
     """
     Validates user passwords.
     """
-    # Check length
-    if len(password) < 8:
-        return False
+    # Camino: longitud menor a 8
+    assert validate_password("Ab1!") == False
 
-    # Check for at least one uppercase letter, one lowercase letter,
-    # one digit, and one special character.
-    if (
-        not re.search(r"[A-Z]", password)
-        or not re.search(r"[a-z]", password)
-        or not re.search(r"\d", password)
-        or not re.search(r"[!@#$%&]", password)
-    ):
-        return False
+    # Camino: falta mayúscula
+    assert validate_password("abc123!@") == False
 
-    return True
+    # Camino: falta minúscula
+    assert validate_password("ABC123!@") == False
+
+    # Camino: falta dígito
+    assert validate_password("Abcdef!@") == False
+
+    # Camino: falta carácter especial
+    assert validate_password("Abc12345") == False
+
+    # Camino: cumple todos los requisitos
+    assert validate_password("Abc123!@") == True
+
 
 
 # 3
-def calculate_total_discount(total_amount):
-    """
-    Calculates the discount for a customer's purchase based on the total amount.
-    """
-    if total_amount < 100:
-        return 0
+def test_calculate_total_discount():
+    # Camino: total menor a 100
+    assert test_calculate_total_discount(50) == 0
 
-    if 100 <= total_amount <= 500:
-        return 0.1 * total_amount
+    # Camino: total exactamente 100
+    assert test_calculate_total_discount(100) == 10.0
 
-    return 0.2 * total_amount
+    # Camino: total entre 100 y 500
+    assert test_calculate_total_discount(250) == 25.0
+
+    # Camino: total exactamente 500
+    assert test_calculate_total_discount(500) == 50.0
+
+    # Camino: total mayor a 500
+    assert test_calculate_total_discount(600) == 120.0
+
 
 
 # 4

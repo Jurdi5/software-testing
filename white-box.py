@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+
+# PR test: agregado para poder enviar a revisión
+
 """
 White-box code examples.
 """
@@ -434,8 +437,6 @@ class TestTrafficLight(unittest.TestCase):
         self.light.state = "Yellow"
         self.light.change_state()
         self.assertEqual(self.light.get)
-
-
 
 # 24
 class UserAuthentication:

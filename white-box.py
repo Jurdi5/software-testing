@@ -13,7 +13,6 @@ def is_even(num):
     return num % 2 == 0
 
 
-
 def divide(a, b):
     """
     Simple division function.
@@ -54,67 +53,49 @@ def check_number_status(number):
     """
     Checks if a given number is positive, negative, or zero.
     """
+    if number > 0:
+        return "Positive"
 
-    # Camino: excepción por entrada no numérica
-    assert check_number_status("abc") == "Not Number"
+    if number < 0:
+        return "Negative"
 
-    # Camino: número positivo
-    assert check_number_status("10") == "Positive"
+    return "Zero"
 
-    # Camino: número negativo
-    assert check_number_status("-5") == "Negative"
-
-    # Camino: número cero
-    assert check_number_status("0") == "Zero"
-
-    # Camino: número flotante positivo
-    assert check_number_status("3.14") == "Positive"
-
-    # Camino: número flotante negativo
-    assert check_number_status("-2.71") == "Negative"
 
 # 2
 def validate_password(password):
     """
     Validates user passwords.
     """
-    # Camino: longitud menor a 8
-    assert validate_password("Ab1!") == False
+    # Check length
+    if len(password) < 8:
+        return False
 
-    # Camino: falta mayúscula
-    assert validate_password("abc123!@") == False
+    # Check for at least one uppercase letter, one lowercase letter,
+    # one digit, and one special character.
+    if (
+        not re.search(r"[A-Z]", password)
+        or not re.search(r"[a-z]", password)
+        or not re.search(r"\d", password)
+        or not re.search(r"[!@#$%&]", password)
+    ):
+        return False
 
-    # Camino: falta minúscula
-    assert validate_password("ABC123!@") == False
-
-    # Camino: falta dígito
-    assert validate_password("Abcdef!@") == False
-
-    # Camino: falta carácter especial
-    assert validate_password("Abc12345") == False
-
-    # Camino: cumple todos los requisitos
-    assert validate_password("Abc123!@") == True
-
+    return True
 
 
 # 3
-def test_calculate_total_discount():
-    # Camino: total menor a 100
-    assert test_calculate_total_discount(50) == 0
+def calculate_total_discount(total_amount):
+    """
+    Calculates the discount for a customer's purchase based on the total amount.
+    """
+    if total_amount < 100:
+        return 0
 
-    # Camino: total exactamente 100
-    assert test_calculate_total_discount(100) == 10.0
+    if 100 <= total_amount <= 500:
+        return 0.1 * total_amount
 
-    # Camino: total entre 100 y 500
-    assert test_calculate_total_discount(250) == 25.0
-
-    # Camino: total exactamente 500
-    assert test_calculate_total_discount(500) == 50.0
-
-    # Camino: total mayor a 500
-    assert test_calculate_total_discount(600) == 120.0
-
+    return 0.2 * total_amount
 
 
 # 4
@@ -231,189 +212,167 @@ def celsius_to_fahrenheit(celsius):
 
     return "Invalid Temperature"
 
-
-# 11
-def validate_credit_card(card_number):
+# 23
+class TrafficLight:
     """
-    Validates credit card numbers.
-    """
-    if 13 <= len(card_number) <= 16 and card_number.isdigit():
-        return "Valid Card"
-
-    return "Invalid Card"
-
-
-# 12
-def validate_date(year, month, day):
-    """
-    Validates dates.
-    """
-    if 1900 <= year <= 2100 and 1 <= month <= 12 and 1 <= day <= 31:
-        return "Valid Date"
-
-    return "Invalid Date"
-
-
-# 13
-def check_flight_eligibility(age, frequent_flyer):
-    """
-    Checks the eligibility of a passenger to book a flight.
-    """
-    if 18 <= age <= 65 or frequent_flyer:
-        return "Eligible to Book"
-
-    return "Not Eligible to Book"
-
-
-# 14
-def validate_url(url):
-    """
-    Validates URLs.
-    """
-    if len(url) <= 255 and url.startswith("http://") or url.startswith("https://"):
-        return "Valid URL"
-
-    return "Invalid URL"
-
-
-# 15
-def calculate_quantity_discount(quantity):
-    """
-    Calculates discounts based on the quantity of a product.
-    """
-    if 1 <= quantity <= 5:
-        return "No Discount"
-
-    if 6 <= quantity <= 10:
-        return "5% Discount"
-
-    return "10% Discount"
-
-
-# 16
-def check_file_size(size_in_bytes):
-    """
-    Checks if the size is valid for a file.
-    """
-    if 0 <= size_in_bytes <= 1048576:  # 1 MB in bytes
-        return "Valid File Size"
-
-    return "Invalid File Size"
-
-
-# 17
-def check_loan_eligibility(income, credit_score):
-    """
-    Checks if and which loan can be granted based on the income and credit score.
-    """
-    if income < 30000:
-        return "Not Eligible"
-
-    if 30000 <= income <= 60000:
-        if credit_score > 700:
-            return "Standard Loan"
-
-        return "Secured Loan"
-
-    if credit_score > 750:
-        return "Premium Loan"
-
-    return "Standard Loan"
-
-
-# 18
-def calculate_shipping_cost(weight, length, width, height):
-    """
-    Calculates the shipping cost based on the package weight and dimensions.
-    """
-    if weight <= 1 and length <= 10 and width <= 10 and height <= 10:
-        return 5
-
-    if (
-        1 < weight <= 5
-        and 11 <= length <= 30
-        and 11 <= width <= 30
-        and 11 <= height <= 30
-    ):
-        return 10
-
-    return 20
-
-
-# 19
-def grade_quiz(correct_answers, incorrect_answers):
-    """
-    Grades online quizzes based on the number of correct and incorrect answers.
-    """
-    if correct_answers >= 7 and incorrect_answers <= 2:
-        return "Pass"
-
-    if correct_answers >= 5 and incorrect_answers <= 3:
-        return "Conditional Pass"
-
-    return "Fail"
-
-
-# 20
-def authenticate_user(username, password):
-    """
-    Authenticates users based on their username and password.
-    """
-    if username == "admin" and password == "admin123":
-        return "Admin"
-
-    if len(username) >= 5 and len(password) >= 8:
-        return "User"
-
-    return "Invalid"
-
-
-# 21
-def get_weather_advisory(temperature, humidity):
-    """
-    Provides weather advisories based on temperature and humidity.
-    """
-    if temperature > 30 and humidity > 70:
-        return "High Temperature and Humidity. Stay Hydrated."
-
-    if temperature < 0:
-        return "Low Temperature. Bundle Up!"
-
-    return "No Specific Advisory"
-
-
-# 22
-class VendingMachine:
-    """
-    A simple vending machine that dispenses drinks.
-    It has two states: "Ready" and "Dispensing."
+    A traffic light system with three states: "Green," "Yellow," and "Red."
     """
 
     def __init__(self):
         """
-        Defines the vending machine initial state.
+        Defines the traffic light initial state.
         """
-        self.state = "Ready"
+        self.state = "Red"
 
-    def insert_coin(self):
+    def change_state(self):
         """
-        Function called when a coin is inserted.
+        Function that changes the traffic light state.
         """
-        if self.state == "Ready":
-            self.state = "Dispensing"
-            return "Coin Inserted. Select your drink."
+        if self.state == "Red":
+            self.state = "Green"
+        elif self.state == "Green":
+            self.state = "Yellow"
+        elif self.state == "Yellow":
+            self.state = "Red"
 
-        return "Invalid operation in current state."
-
-    def select_drink(self):
+    def get_current_state(self):
         """
-        Function called after selecting a drink.
+        Provides the current traffic light state.
         """
-        if self.state == "Dispensing":
-            self.state = "Ready"
-            return "Drink Dispensed. Thank you!"
+        return self.state
 
-        return "Invalid operation in current state."
+
+# 1
+    def test_check_number_status_positive(self):
+        self.assertEqual(check_number_status(10), "Positive")
+
+    def test_check_number_status_negative(self):
+        self.assertEqual(check_number_status(-3), "Negative")
+
+    def test_check_number_status_zero(self):
+        self.assertEqual(check_number_status(0), "Zero")
+
+    # 2
+    def test_validate_password_valid(self):
+        self.assertTrue(validate_password("Valid1@pw"))
+
+    def test_validate_password_too_short(self):
+        self.assertFalse(validate_password("Ab1@"))
+
+    def test_validate_password_missing_uppercase(self):
+        self.assertFalse(validate_password("valid1@pw"))
+
+    def test_validate_password_missing_digit(self):
+        self.assertFalse(validate_password("Invalid@pw"))
+
+    def test_validate_password_missing_special(self):
+        self.assertFalse(validate_password("Invalid1pw"))
+
+    # 3
+    def test_calculate_total_discount_less_than_100(self):
+        self.assertEqual(calculate_total_discount(50), 0)
+
+    def test_calculate_total_discount_between_100_and_500(self):
+        self.assertEqual(calculate_total_discount(200), 20)
+
+    def test_calculate_total_discount_more_than_500(self):
+        self.assertEqual(calculate_total_discount(600), 120)
+
+    # 4
+    def test_calculate_order_total_no_discount(self):
+        items = [{"quantity": 2, "price": 10}]
+        self.assertEqual(calculate_order_total(items), 20)
+
+    def test_calculate_order_total_5_percent_discount(self):
+        items = [{"quantity": 6, "price": 10}]
+        self.assertEqual(calculate_order_total(items), 57)  # 6*10*0.95
+
+    def test_calculate_order_total_10_percent_discount(self):
+        items = [{"quantity": 12, "price": 10}]
+        self.assertEqual(calculate_order_total(items), 108)  # 12*10*0.9
+
+    # 5
+    def test_calculate_items_shipping_cost_standard_low_weight(self):
+        items = [{"weight": 2}, {"weight": 2}]
+        self.assertEqual(calculate_items_shipping_cost(items, "standard"), 10)
+
+    def test_calculate_items_shipping_cost_standard_mid_weight(self):
+        items = [{"weight": 6}]
+        self.assertEqual(calculate_items_shipping_cost(items, "standard"), 15)
+
+    def test_calculate_items_shipping_cost_standard_high_weight(self):
+        items = [{"weight": 12}]
+        self.assertEqual(calculate_items_shipping_cost(items, "standard"), 20)
+
+    def test_calculate_items_shipping_cost_express_low_weight(self):
+        items = [{"weight": 5}]
+        self.assertEqual(calculate_items_shipping_cost(items, "express"), 20)
+
+    def test_calculate_items_shipping_cost_express_mid_weight(self):
+        items = [{"weight": 9}]
+        self.assertEqual(calculate_items_shipping_cost(items, "express"), 30)
+
+    def test_calculate_items_shipping_cost_express_high_weight(self):
+        items = [{"weight": 15}]
+        self.assertEqual(calculate_items_shipping_cost(items, "express"), 40)
+
+    def test_calculate_items_shipping_cost_invalid_method(self):
+        items = [{"weight": 3}]
+        with self.assertRaises(ValueError):
+            calculate_items_shipping_cost(items, "fast")
+
+    # 6
+    def test_validate_login_success(self):
+        self.assertEqual(validate_login("username", "Password1"), "Login Successful")
+
+    def test_validate_login_fail_short_username(self):
+        self.assertEqual(validate_login("usr", "Password1"), "Login Failed")
+
+    def test_validate_login_fail_short_password(self):
+        self.assertEqual(validate_login("username", "short"), "Login Failed")
+
+    # 7
+    def test_verify_age_eligible(self):
+        self.assertEqual(verify_age(30), "Eligible")
+
+    def test_verify_age_not_eligible_underage(self):
+        self.assertEqual(verify_age(15), "Not Eligible")
+
+    def test_verify_age_not_eligible_overage(self):
+        self.assertEqual(verify_age(70), "Not Eligible")
+
+    # 8
+    def test_categorize_product_category_a(self):
+        self.assertEqual(categorize_product(20), "Category A")
+
+    def test_categorize_product_category_b(self):
+        self.assertEqual(categorize_product(80), "Category B")
+
+    def test_categorize_product_category_c(self):
+        self.assertEqual(categorize_product(150), "Category C")
+
+    def test_categorize_product_category_d(self):
+        self.assertEqual(categorize_product(500), "Category D")
+
+    # 9
+    def test_validate_email_valid(self):
+        self.assertEqual(validate_email("user@example.com"), "Valid Email")
+
+    def test_validate_email_invalid_no_at(self):
+        self.assertEqual(validate_email("userexample.com"), "Invalid Email")
+
+    def test_validate_email_invalid_short(self):
+        self.assertEqual(validate_email("a@b"), "Invalid Email")
+
+    # 10
+    def test_celsius_to_fahrenheit_valid(self):
+        self.assertEqual(celsius_to_fahrenheit(0), 32)
+
+    def test_celsius_to_fahrenheit_negative(self):
+        self.assertEqual(celsius_to_fahrenheit(-40), -40)
+
+    def test_celsius_to_fahrenheit_invalid(self):
+        self.assertEqual(celsius_to_fahrenheit(200), "Invalid Temperature")
 
 
 # 23
@@ -444,6 +403,38 @@ class TrafficLight:
         Provides the current traffic light state.
         """
         return self.state
+
+
+# --- Tests para TrafficLight ---
+import unittest
+
+class TestTrafficLight(unittest.TestCase):
+    """Unit tests for TrafficLight"""
+
+    def setUp(self):
+        self.light = TrafficLight()
+
+    def test_initial_state(self):
+        """El semáforo inicia en rojo"""
+        self.assertEqual(self.light.get_current_state(), "Red")
+
+    def test_change_state_red_to_green(self):
+        """De rojo debe pasar a verde"""
+        self.light.change_state()
+        self.assertEqual(self.light.get_current_state(), "Green")
+
+    def test_change_state_green_to_yellow(self):
+        """De verde debe pasar a amarillo"""
+        self.light.state = "Green"
+        self.light.change_state()
+        self.assertEqual(self.light.get_current_state(), "Yellow")
+
+    def test_change_state_yellow_to_red(self):
+        """De amarillo debe volver a rojo"""
+        self.light.state = "Yellow"
+        self.light.change_state()
+        self.assertEqual(self.light.get)
+
 
 
 # 24

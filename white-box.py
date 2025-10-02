@@ -699,3 +699,310 @@ class ShoppingCart:
         total = sum(item["product"].price * item["quantity"] for item in self.items)
         print(f"Total: ${total}")
         print("Checkout completed. Thank you for shopping!")
+
+# 27
+class BankAccount:  # pylint: disable=too-few-public-methods
+    """
+    Bank account class.
+    """
+
+    def __init__(self, account_number, balance):
+        """
+        Set the bank account details.
+        """
+        self.account_number = account_number
+        self.balance = balance
+
+    def view_account(self):
+        """
+        Function to display the account details.
+        """
+        print(f"The account {self.account_number} has a balance of {self.balance}")
+
+
+class BankingSystem:
+    """
+    Banking system class.
+    """
+
+    def __init__(self):
+        """
+        Mock users.
+        """
+        self.users = {"user123": "pass123"}  # Simplified user database
+        self.logged_in_users = set()
+
+    def authenticate(self, username, password):
+        """
+        User authentication function.
+        """
+        if username in self.users and self.users[username] == password:
+            if username not in self.logged_in_users:
+                self.logged_in_users.add(username)
+                print(f"User {username} authenticated successfully.")
+                return True
+
+            print("User already logged in.")
+        else:
+            print("Authentication failed.")
+
+        return False
+
+    def transfer_money(self, sender, receiver, amount, transaction_type):
+        """
+        Function to perform a money transfer.
+        """
+        if sender not in self.logged_in_users:
+            print("Sender not authenticated.")
+            return False
+
+        # Simulate transaction processing logic
+        if transaction_type == "regular":
+            fee = 0.02 * amount
+        elif transaction_type == "express":
+            fee = 0.05 * amount
+        elif transaction_type == "scheduled":
+            fee = 0.01 * amount
+        else:
+            print("Invalid transaction type.")
+            return False
+
+        # Simulate checking for sufficient funds
+        if BankAccount(sender, 1000).balance < (amount + fee):
+            print("Insufficient funds.")
+            return False
+
+        print(
+            f"Money transfer of ${amount} ({transaction_type} transfer)"
+            f" from {sender} to {receiver} processed successfully."
+        )
+        return True
+
+
+# 28
+class Product:  # pylint: disable=too-few-public-methods
+    """
+    Product class.
+    """
+
+    def __init__(self, name, price):
+        """
+        Set the product details.
+        """
+        self.name = name
+        self.price = price
+
+    def view_product(self):
+        """
+        Function to display the product details.
+        """
+        msg = f"The product {self.name} has a price of {self.price}"
+        print(msg)
+        return msg
+
+
+class ShoppingCart:
+    """
+    Shopping cart class.
+    """
+
+    def __init__(self):
+        """
+        Initialize the shopping cart.
+        """
+        self.items = []
+
+    def add_product(self, product, quantity=1):
+        """
+        Function to add a product to the shopping cart.
+        """
+        for item in self.items:
+            if item["product"] == product:
+                item["quantity"] += quantity
+                break
+        else:
+            self.items.append({"product": product, "quantity": quantity})
+
+    def remove_product(self, product, quantity=1):
+        """
+        Function to remove a product from the shopping cart.
+        """
+        for item in self.items:
+            if item["product"] == product:
+                if item["quantity"] <= quantity:
+                    self.items.remove(item)
+                else:
+                    item["quantity"] -= quantity
+                break
+
+    def view_cart(self):
+        """
+        Function to display the shopping cart content.
+        """
+        for item in self.items:
+            print(
+                f"{item['quantity']} x {item['product'].name}"
+                f" - ${item['product'].price * item['quantity']}"
+            )
+
+    def checkout(self):
+        """
+        Function to checkout the items from the shopping cart.
+        """
+        total = sum(item["product"].price * item["quantity"] for item in self.items)
+        print(f"Total: ${total}")
+        print("Checkout completed. Thank you for shopping!")
+
+        # -*- coding: utf-8 -*-
+"""
+Unit tests for exercises 27 and 28.
+"""
+import unittest
+from io import StringIO
+from unittest.mock import patch
+
+
+
+class TestBankingSystem(unittest.TestCase):
+    """
+    Unit tests for BankingSystem and BankAccount (Exercise 27).
+    """
+
+    def setUp(self):
+        self.bank = BankingSystem()
+
+    @patch("sys.stdout", new_callable=StringIO)
+    def test_authenticate_success(self, mock_stdout):
+        """
+        Checks that a valid user can log in.
+        """
+        result = self.bank.authenticate("user123", "pass123")
+        self.assertTrue(result)
+        self.assertIn("User user123 authenticated successfully.", mock_stdout.getvalue())
+
+    @patch("sys.stdout", new_callable=StringIO)
+    def test_authenticate_failure(self, mock_stdout):
+        """
+        Checks authentication fails with invalid credentials.
+        """
+        result = self.bank.authenticate("user123", "wrongpass")
+        self.assertFalse(result)
+        self.assertIn("Authentication failed.", mock_stdout.getvalue())
+
+    @patch("sys.stdout", new_callable=StringIO)
+    def test_authenticate_already_logged_in(self, mock_stdout):
+        """
+        Checks that a user already logged in cannot log in again.
+        """
+        self.bank.authenticate("user123", "pass123")
+        result = self.bank.authenticate("user123", "pass123")
+        self.assertFalse(result)
+        self.assertIn("User already logged in.", mock_stdout.getvalue())
+
+    @patch("sys.stdout", new_callable=StringIO)
+    def test_transfer_money_success_regular(self, mock_stdout):
+        """
+        Checks a successful regular money transfer.
+        """
+        self.bank.authenticate("user123", "pass123")
+        result = self.bank.transfer_money("user123", "receiver456", 100, "regular")
+        self.assertTrue(result)
+        self.assertIn("Money transfer of $100 (regular transfer)", mock_stdout.getvalue())
+
+    @patch("sys.stdout", new_callable=StringIO)
+    def test_transfer_money_invalid_type(self, mock_stdout):
+        """
+        Checks transfer fails with an invalid transaction type.
+        """
+        self.bank.authenticate("user123", "pass123")
+        result = self.bank.transfer_money("user123", "receiver456", 50, "invalid")
+        self.assertFalse(result)
+        self.assertIn("Invalid transaction type.", mock_stdout.getvalue())
+
+    @patch("sys.stdout", new_callable=StringIO)
+    def test_transfer_money_not_authenticated(self, mock_stdout):
+        """
+        Checks transfer fails when sender is not authenticated.
+        """
+        result = self.bank.transfer_money("user123", "receiver456", 100, "regular")
+        self.assertFalse(result)
+        self.assertIn("Sender not authenticated.", mock_stdout.getvalue())
+
+    @patch("sys.stdout", new_callable=StringIO)
+    def test_transfer_money_insufficient_funds(self, mock_stdout):
+        """
+        Checks transfer fails if funds are insufficient.
+        """
+        self.bank.authenticate("user123", "pass123")
+        result = self.bank.transfer_money("user123", "receiver456", 2000, "express")
+        self.assertFalse(result)
+        self.assertIn("Insufficient funds.", mock_stdout.getvalue())
+
+
+class TestShoppingCart(unittest.TestCase):
+    """
+    Unit tests for Product and ShoppingCart (Exercise 28).
+    """
+
+    def setUp(self):
+        self.cart = ShoppingCart()
+        self.prod1 = Product("Laptop", 1000)
+        self.prod2 = Product("Mouse", 50)
+
+    def test_add_product_new_item(self):
+        """
+        Checks a product can be added to the cart.
+        """
+        self.cart.add_product(self.prod1, 2)
+        self.assertEqual(len(self.cart.items), 1)
+        self.assertEqual(self.cart.items[0]["quantity"], 2)
+
+    def test_add_product_existing_item(self):
+        """
+        Checks quantity increases when adding an existing product.
+        """
+        self.cart.add_product(self.prod2, 1)
+        self.cart.add_product(self.prod2, 2)
+        self.assertEqual(self.cart.items[0]["quantity"], 3)
+
+    def test_remove_product_partial(self):
+        """
+        Checks removing some quantity decreases correctly.
+        """
+        self.cart.add_product(self.prod1, 3)
+        self.cart.remove_product(self.prod1, 1)
+        self.assertEqual(self.cart.items[0]["quantity"], 2)
+
+    def test_remove_product_entirely(self):
+        """
+        Checks removing all quantity removes product from cart.
+        """
+        self.cart.add_product(self.prod2, 1)
+        self.cart.remove_product(self.prod2, 1)
+        self.assertEqual(len(self.cart.items), 0)
+
+    @patch("sys.stdout", new_callable=StringIO)
+    def test_view_cart(self, mock_stdout):
+        """
+        Checks that viewing the cart prints correct details.
+        """
+        self.cart.add_product(self.prod1, 1)
+        self.cart.view_cart()
+        output = mock_stdout.getvalue()
+        self.assertIn("1 x Laptop - $1000", output)
+
+    @patch("sys.stdout", new_callable=StringIO)
+    def test_checkout(self, mock_stdout):
+        """
+        Checks that checkout prints total and confirmation.
+        """
+        self.cart.add_product(self.prod1, 1)
+        self.cart.add_product(self.prod2, 2)
+        self.cart.checkout()
+        output = mock_stdout.getvalue()
+        self.assertIn("Total: $1100", output)
+        self.assertIn("Checkout completed.", output)
+
+
+if __name__ == "__main__":
+    unittest.main()

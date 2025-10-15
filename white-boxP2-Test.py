@@ -1,6 +1,6 @@
 import unittest
 
-from white-boxP2.py import (
+from whiteBoxP2 import (
     UserAuthentication,
     DocumentEditingSystem,
     ElevatorSystem,
